@@ -45,12 +45,16 @@ class txt():
     def SuperStrip(self,Instring:str,rightORLeft):
 
         if rightORLeft == "r":
-            Instring = Instring.strip("\n") if Instring[-1:] == "\n" else Instring
+            Instring = Instring.rstrip("\n") if Instring[-1:] == "\n" else Instring
+            Instring = Instring.rstrip("\t") if Instring[-1:] == "\t" else Instring
             # print(Instring)
 
             while Instring[-1:] == " ":
                 Instring = Instring.rstrip(" ")
         else:
+            Instring = Instring.lstrip("\n") if Instring[-1:] == "\n" else Instring
+            Instring = Instring.lstrip("\t") if Instring[-1:] == "\t" else Instring
+
             while Instring[:1] == " ":
                 Instring = Instring.lstrip(" ")
         return Instring
