@@ -1,7 +1,9 @@
 
 
-class text():
+class txt():
     def __init__(self,filePathWithName):
+
+        self.settingMap = {}
         try:
             self.file = open(filePathWithName,"r+")
         except FileNotFoundError as _:
@@ -10,14 +12,29 @@ class text():
 
     def readSetting(self):
         line = None
-        while line is not "":
+        settingKey = None
+        tempMap = None
+        while line != "":
             line = self.file.readline()
-            # print(line == "")
-            start = line.index("#")
-            print(start)
-            # except ValueError as e:
-                # print(e)
-                # break
+            try:
+                start = line.index("#")
+                if tempMap is not None:
+                    self.settingMap[settingKey] = tempMap
+                settingKey = self.SuperStrip(line[start:],"r")
+                tempMap = {}
+            except Exception as e:
+                if line.find("=") != -1:
+                    lineArray = line.split("=")
+
+                    key = self.SuperStrip(self.SuperStrip(lineArray[0],"r"),"l")
+                    value = self.SuperStrip(self.SuperStrip(lineArray[1],"r"),"l")
+
+                    tempMap[key] = value
+                    continue
+        if tempMap is not None:
+            self.settingMap[settingKey] = tempMap
+        print(self.settingMap)
+
 
 
 
@@ -25,8 +42,22 @@ class text():
     def initSetting(self):
         pass
 
+    def SuperStrip(self,Instring:str,rightORLeft):
+
+        if rightORLeft == "r":
+            Instring = Instring.strip("\n") if Instring[-1:] == "\n" else Instring
+            # print(Instring)
+
+            while Instring[-1:] == " ":
+                Instring = Instring.rstrip(" ")
+        else:
+            while Instring[:1] == " ":
+                Instring = Instring.lstrip(" ")
+        return Instring
+
+
 
 if __name__ == "__main__":
 
-    f = text("d://a.text")
+    f = txt("d://a.txt")
     f.readSetting()
