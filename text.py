@@ -14,25 +14,40 @@ class txt():
         line = None
         settingKey = None
         tempMap = None
+        tempList = []
         while line != "":
             line = self.file.readline()
+
             try:
                 start = line.index("#")
                 if tempMap is not None:
                     self.settingMap[settingKey] = tempMap
                 settingKey = self.SuperStrip(line[start:],"r")
+
+                if tempList.__len__() > 0:
+                    self.settingMap[settingKey]["list"] = tempList
+                    tempList = []
                 tempMap = {}
+
+
             except Exception as e:
                 if line.find("=") != -1:
                     lineArray = line.split("=")
-
                     key = self.SuperStrip(self.SuperStrip(lineArray[0],"r"),"l")
                     value = self.SuperStrip(self.SuperStrip(lineArray[1],"r"),"l")
 
                     tempMap[key] = value
+                elif line.__len__() > 1:
+                    # print(line)
+                    tempList.append(self.SuperStrip(self.SuperStrip(line,"r"),"l"))
+                    # print(tempList)
                     continue
+
         if tempMap is not None:
             self.settingMap[settingKey] = tempMap
+        if tempList.__len__() > 0:
+            self.settingMap[settingKey]["list"] = tempList
+
         print(self.settingMap)
 
 
@@ -63,5 +78,5 @@ class txt():
 
 if __name__ == "__main__":
 
-    f = txt("d://a.txt")
+    f = txt("./a.txt")
     f.readSetting()
